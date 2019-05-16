@@ -49,7 +49,6 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
 }
 
 @property (strong, nonatomic) NSCalendar *gregorian;
-@property (strong, nonatomic) NSDateFormatter *formatter;
 
 @property (weak  , nonatomic) UIView                     *contentView;
 @property (weak  , nonatomic) UIView                     *daysContainer;
@@ -150,9 +149,10 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
     
     _gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     _formatter = [[NSDateFormatter alloc] init];
-    _formatter.dateFormat = @"yyyy-MM-dd";
-    _locale = [NSLocale currentLocale];
-    _timeZone = [NSTimeZone localTimeZone];
+    _formatter.dateFormat = @"yyyy-MM-dd'T'00:00:00-0700";
+    _formatter.timeZone = [NSTimeZone timeZoneWithName: @"America/Phoenix"]; 
+    _locale = [NSLocale localeWithLocaleIdentifier: @"en_US"];
+    _timeZone = [NSTimeZone timeZoneWithName: @"America/Phoenix"]; 
     _firstWeekday = 1;
     [self invalidateDateTools];
     
@@ -1059,7 +1059,7 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
     
     FSCalendarAssertDateInBounds(date,self.gregorian,self.minimumDate,self.maximumDate);
     
-    NSDate *targetDate = [self.gregorian dateBySettingHour:0 minute:0 second:0 ofDate:date options:0];
+    NSDate *targetDate = date;
     NSIndexPath *targetIndexPath = [self.calculator indexPathForDate:targetDate];
     
     BOOL shouldSelect = YES;
@@ -1266,10 +1266,10 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
 - (void)invalidateDateTools
 {
     _gregorian.locale = _locale;
-    _gregorian.timeZone = _timeZone;
+    _gregorian.timeZone = [NSTimeZone timeZoneWithName: @"America/Phoenix"];
     _gregorian.firstWeekday = _firstWeekday;
     _formatter.calendar = _gregorian;
-    _formatter.timeZone = _timeZone;
+    _formatter.timeZone = [NSTimeZone timeZoneWithName: @"America/Phoenix"];
     _formatter.locale = _locale;
 }
 
@@ -1531,7 +1531,7 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
 {
     if (_needsRequestingBoundingDates) {
         _needsRequestingBoundingDates = NO;
-        self.formatter.dateFormat = @"yyyy-MM-dd";
+        self.formatter.dateFormat = @"yyyy-MM-dd'T'00:00:00-0700";
         NSDate *newMin = [self.dataSourceProxy minimumDateForCalendar:self]?:[self.formatter dateFromString:@"1970-01-01"];
         newMin = [self.gregorian dateBySettingHour:0 minute:0 second:0 ofDate:newMin options:0];
         NSDate *newMax = [self.dataSourceProxy maximumDateForCalendar:self]?:[self.formatter dateFromString:@"2099-12-31"];
