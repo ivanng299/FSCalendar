@@ -149,10 +149,10 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
     
     _gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     _formatter = [[NSDateFormatter alloc] init];
-    _formatter.dateFormat = @"yyyy-MM-dd'T'00:00:00-0700";
-    _formatter.timeZone = [NSTimeZone timeZoneWithName: @"America/Phoenix"]; 
+    _formatter.dateFormat = @"yyyy-MM-dd'T'00:00:00+0800";
+    _formatter.timeZone = [NSTimeZone timeZoneWithName: @"Asia/Hong_Kong"];
     _locale = [NSLocale localeWithLocaleIdentifier: @"en_US"];
-    _timeZone = [NSTimeZone timeZoneWithName: @"America/Phoenix"]; 
+    _timeZone = [NSTimeZone timeZoneWithName: @"Asia/Hong_Kong"];
     _firstWeekday = 1;
     [self invalidateDateTools];
     
@@ -1266,10 +1266,10 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
 - (void)invalidateDateTools
 {
     _gregorian.locale = _locale;
-    _gregorian.timeZone = [NSTimeZone timeZoneWithName: @"America/Phoenix"];
+    _gregorian.timeZone = [NSTimeZone timeZoneWithName: @"Asia/Hong_Kong"];
     _gregorian.firstWeekday = _firstWeekday;
     _formatter.calendar = _gregorian;
-    _formatter.timeZone = [NSTimeZone timeZoneWithName: @"America/Phoenix"];
+    _formatter.timeZone = [NSTimeZone timeZoneWithName: @"Asia/Hong_Kong"];
     _formatter.locale = _locale;
 }
 
@@ -1531,7 +1531,7 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
 {
     if (_needsRequestingBoundingDates) {
         _needsRequestingBoundingDates = NO;
-        self.formatter.dateFormat = @"yyyy-MM-dd'T'00:00:00-0700";
+        self.formatter.dateFormat = @"yyyy-MM-dd'T'00:00:00+0800";
         NSDate *newMin = [self.dataSourceProxy minimumDateForCalendar:self]?:[self.formatter dateFromString:@"1970-01-01"];
         newMin = [self.gregorian dateBySettingHour:0 minute:0 second:0 ofDate:newMin options:0];
         NSDate *newMax = [self.dataSourceProxy maximumDateForCalendar:self]?:[self.formatter dateFromString:@"2099-12-31"];
